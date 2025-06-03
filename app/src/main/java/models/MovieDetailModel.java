@@ -1,64 +1,99 @@
 package models;
 
+
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
-
 public class MovieDetailModel {
-    private String name;
-    private String directorName;
-    private String yearOfRelease;
+    @SerializedName("adult")
+    private boolean adult;
+    @SerializedName("backdrop_path")
+    private String backdropPath;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("overview")
+    private String overview;
+    @SerializedName("popularity")
+    private double popularity;
+    @SerializedName("poster_path")
+    private String posterPath;
+    @SerializedName("release_date")
+    private String releaseDate;
+    @SerializedName("runtime")
+    private String runtime;
+    @SerializedName("title")
+    private String title;
+    @SerializedName("tagline")
+    private String tagline;
+    @SerializedName("vote_average")
+    private double voteAverage;
+    @SerializedName("vote_count")
+    private int voteCount;
 
-    private int durationInMinutes;
-
-    private String description;
-
-    private String posterLink;
-    private String trailerLink;
-
-    private  String headerImageLink;
-
-    public MovieDetailModel(String name, String directorName, String yearOfRelease, int durationInMinutes, String description, String posterLink, String trailerLink, String headerImageLink) {
-        this.name = name;
-        this.directorName = directorName;
-        this.yearOfRelease = yearOfRelease;
-        this.durationInMinutes = durationInMinutes;
-        this.description = description;
-        this.posterLink = posterLink;
-        this.trailerLink = trailerLink;
-        this.headerImageLink = headerImageLink;
-
+    // Full constructor
+    public MovieDetailModel(boolean adult, String backdropPath, int id, String overview,
+                            double popularity, String posterPath, String releaseDate,
+                            String runtime, String title, String tagline,
+                            double voteAverage, int voteCount) {
+        this.adult = adult;
+        this.backdropPath = backdropPath;
+        this.id = id;
+        this.overview = overview;
+        this.popularity = popularity;
+        this.posterPath = posterPath;
+        this.releaseDate = releaseDate;
+        this.runtime = runtime;
+        this.title = title;
+        this.tagline = tagline;
+        this.voteAverage = voteAverage;
+        this.voteCount = voteCount;
     }
 
-    public String getName() {
-        return name;
+    // Getters
+    public boolean isAdult() {
+        return adult;
     }
 
-    public String getDirectorName() {
-        return directorName;
+    public String getBackdropPath() {
+        return "https://image.tmdb.org/t/p/w500" + backdropPath;
     }
 
-    public String getYearOfRelease() {
-        return yearOfRelease;
+    public int getId() {
+        return id;
     }
 
-    public int getDurationInMinutes() {
-        return durationInMinutes;
+    public String getOverview() {
+        return overview;
     }
 
-    public String getDescription() {
-        return description;
+    public double getPopularity() {
+        return popularity;
     }
 
-    public String getPosterLink() {
-        return posterLink;
+    public String getPosterPath() {
+        return "https://image.tmdb.org/t/p/w500" + posterPath;
     }
 
-    public String getTrailerLink() {
-        return trailerLink;
+    public String getReleaseDate() {
+        return releaseDate.substring(0,4);
     }
 
-    public String getHeaderImageLink() {
-        return headerImageLink;
+    public String getRuntime() {
+        return runtime;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getTagline() {
+        return tagline;
+    }
+
+    public double getVoteAverage() {
+        return voteAverage;
+    }
+
+    public int getVoteCount() {
+        return voteCount;
     }
 }

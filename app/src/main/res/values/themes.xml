@@ -15,4 +15,11 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="AppBarStyle">
+        <item name="android:background">#242E34</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:titleTextColor">@color/white</item>
+        <item name="android:elevation">0dp</item>
+    </style>
 </resources>

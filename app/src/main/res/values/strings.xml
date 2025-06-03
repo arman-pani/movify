@@ -13,4 +13,8 @@
     <string name="open">open</string>
     <string name="close">close</string>
     <string name="mins">mins</string>
+    <string name="show_more">Show more</string>
+    <string name="search_hinttext">Search....</string>
+    <string name="crew">CREW</string>
+    <string name="cast">CAST</string>
 </resources>

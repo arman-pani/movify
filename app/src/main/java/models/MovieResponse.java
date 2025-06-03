@@ -1,10 +1,8 @@
-package repository;
+package models;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
-
-import models.MovieCardModel;
 
 public class MovieResponse {
     @SerializedName("page")

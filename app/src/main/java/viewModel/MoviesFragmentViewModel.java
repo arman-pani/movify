@@ -9,12 +9,7 @@ import androidx.lifecycle.ViewModel;
 import java.util.List;
 
 import models.MovieCardModel;
-import network.ApiService;
 import repository.MovieRepository;
-import repository.MovieResponse;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MoviesFragmentViewModel extends ViewModel {
     private final MovieRepository movieRepository = new MovieRepository();
