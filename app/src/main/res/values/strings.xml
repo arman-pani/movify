@@ -17,4 +17,5 @@
     <string name="search_hinttext">Search....</string>
     <string name="crew">CREW</string>
     <string name="cast">CAST</string>
+    <string name="similar_movies">Similar Movies</string>
 </resources>

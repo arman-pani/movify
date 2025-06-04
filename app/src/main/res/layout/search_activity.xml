@@ -1,4 +1,5 @@
 <LinearLayout android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -8,16 +9,22 @@
         android:layout_height="wrap_content"
         android:background="#242E34"
         android:backgroundTint="#242E34"
-        android:theme="@style/AppBarStyle">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <EditText
-            android:id="@+id/searchEditText"
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/directSearchView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:autofillHints=""
-            android:background="@drawable/edittext_bg"
-            android:hint="@string/search_hinttext"
-            android:inputType="text" />
+            android:layout_height="wrap_content"
+            android:queryHint="@string/search_hinttext"
+            android:background="@color/black"
+            android:iconifiedByDefault="false" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/searchTabLayout"
+            android:background="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
@@ -30,8 +37,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-
             />
     </ScrollView>
+
 
 </LinearLayout>

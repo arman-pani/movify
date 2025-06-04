@@ -10,6 +10,8 @@ import fragments.MoviesFragment;
 import fragments.ReviewsFragment;
 
 public class TabViewPagerAdapter extends FragmentStateAdapter {
+
+
     public TabViewPagerAdapter(@NonNull FragmentActivity fragmentActivity){
         super(fragmentActivity);
     }

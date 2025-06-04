@@ -1,28 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-<!--    <ProgressBar-->
-<!--        android:id="@+id/loadingProgressBar"-->
-<!--        android:layout_width="60dp"-->
-<!--        android:layout_height="60dp"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:visibility="visible" />-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/movieLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/similarMoviesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/similarMoviesTextView" />
+
+        <TextView
+            android:id="@+id/similarMoviesTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/similar_movies"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/divider6" />
+
+        <View
+            android:id="@+id/divider6"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/crewRecyclerView" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/crewRecyclerView"
@@ -45,7 +68,7 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/castRecyclerView" />
+            app:layout_constraintTop_toBottomOf="@+id/divider4" />
 
         <TextView
             android:id="@+id/textView3"
@@ -72,8 +95,8 @@
         <ImageView
             android:id="@+id/headerImageView"
             android:layout_width="match_parent"
-            android:contentDescription="@null"
             android:layout_height="0dp"
+            android:contentDescription="@null"
             android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="16:9"
             app:layout_constraintEnd_toEndOf="parent"
@@ -109,8 +132,9 @@
             android:id="@+id/posterImageView"
             android:layout_width="110dp"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:contentDescription="@null"
+            app:layout_constraintBottom_toBottomOf="@+id/headerImageView"
             app:layout_constraintDimensionRatio="2:3"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/headerImageView" />
@@ -130,12 +154,11 @@
             android:id="@+id/directorNameTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/posterImageView"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -145,7 +168,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toStartOf="@+id/posterImageView"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/directorNameTextView">
 
@@ -166,9 +190,9 @@
 
             <TextView
                 android:id="@+id/trailerTextButton"
-                android:text="@string/trailerButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/trailerButton"
                 android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
 
@@ -375,9 +399,20 @@
             android:id="@+id/taglineTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/posterImageView" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="409dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="6dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/castRecyclerView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

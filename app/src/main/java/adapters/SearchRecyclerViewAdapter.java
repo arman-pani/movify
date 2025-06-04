@@ -18,14 +18,15 @@ import java.util.List;
 
 import activities.MovieActivity;
 import models.MovieCardModel;
+import models.SearchItemModel;
 
 public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.SearchViewHolder> {
     private Context context;
-    private List<MovieCardModel> moviesList;
+    private List<SearchItemModel> searchItems;
 
-    public SearchRecyclerViewAdapter(Context context, List<MovieCardModel> moviesList) {
+    public SearchRecyclerViewAdapter(Context context, List<SearchItemModel> searchItems) {
         this.context = context;
-        this.moviesList = moviesList;
+        this.searchItems = searchItems;
     }
 
     public static class SearchViewHolder extends RecyclerView.ViewHolder {
@@ -52,11 +53,11 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
     @Override
     public void onBindViewHolder(@NonNull SearchViewHolder holder, int position) {
-        MovieCardModel movieCardModel = moviesList.get(position);
-        String fullUrl = "https://image.tmdb.org/t/p/w500" + movieCardModel.getPosterUrl();
+        SearchItemModel searchItemModel = searchItems.get(position);
+        String fullUrl = "https://image.tmdb.org/t/p/w500" + searchItemModel.getPosterPath();
 
-        holder.searchTitleTextView.setText(movieCardModel.getTitle());
-        holder.searchSubTitleTextView.setText(movieCardModel.getReleaseDate());
+        holder.searchTitleTextView.setText(searchItemModel.getTitle());
+        holder.searchSubTitleTextView.setText(searchItemModel.getSubTitle());
 
 
         Glide.with(context)
@@ -64,21 +65,21 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(holder.searchPosterImageView);
 
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, MovieActivity.class);
-            intent.putExtra("movieId", movieCardModel.getId());
-            context.startActivity(intent);
-        });
+//        holder.itemView.setOnClickListener(v -> {
+//            Intent intent = new Intent(context, MovieActivity.class);
+//            intent.putExtra("movieId", searchItemModel.getId());
+//            context.startActivity(intent);
+//        });
     }
 
-    public void updateMovieList(List<MovieCardModel> newMovies) {
-        this.moviesList = newMovies;
+    public void updateSearchList(List<SearchItemModel> newItems) {
+        this.searchItems = newItems;
         notifyDataSetChanged();
     }
 
 
     @Override
     public int getItemCount() {
-        return moviesList.size();
+        return searchItems.size();
     }
 }

@@ -24,6 +24,7 @@ import com.example.movieapp.R;
 
 import adapters.CastRecyclerViewAdapter;
 import adapters.CrewRecyclerViewAdapter;
+import adapters.SimilarRecyclerViewAdapter;
 import viewModel.MovieActivityViewModel;
 import viewModel.MoviesFragmentViewModel;
 
@@ -56,11 +57,16 @@ public class MovieActivity extends AppCompatActivity {
         TextView trailerButton = findViewById(R.id.trailerTextButton);
         RecyclerView castRecyclerView = findViewById(R.id.castRecyclerView);
         RecyclerView crewRecyclerView = findViewById(R.id.crewRecyclerView);
+        RecyclerView similarRecyclerView = findViewById(R.id.similarMoviesRecyclerView);
+
+
 
         LinearLayoutManager castLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager crewLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager similarLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         castRecyclerView.setLayoutManager(castLayoutManager);
         crewRecyclerView.setLayoutManager(crewLayoutManager);
+        similarRecyclerView.setLayoutManager(similarLayoutManager);
 
         movieId = (int) getIntent().getSerializableExtra("movieId");
 
@@ -121,6 +127,11 @@ public class MovieActivity extends AppCompatActivity {
         viewModel.getCrewList().observe(this, crewList -> {
             CrewRecyclerViewAdapter crewAdapter = new CrewRecyclerViewAdapter(crewList, this);
             crewRecyclerView.setAdapter(crewAdapter);
+        });
+
+        viewModel.getSimilarMovies().observe(this, similarMovies -> {
+            SimilarRecyclerViewAdapter similarAdapter = new SimilarRecyclerViewAdapter(this, similarMovies);
+            similarRecyclerView.setAdapter(similarAdapter);
         });
 
 //        loadingProgressBar.setVisibility(View.GONE);

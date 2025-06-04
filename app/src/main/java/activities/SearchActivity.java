@@ -1,9 +1,8 @@
 package activities;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.widget.EditText;
+
+import androidx.appcompat.widget.SearchView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieapp.R;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
@@ -21,37 +21,85 @@ import viewModel.SearchActivityViewModel;
 public class SearchActivity extends AppCompatActivity {
 
     private SearchActivityViewModel viewModel;
+    private SearchView searchView;
+
+    private TabLayout tabLayout;
+
+    private SearchRecyclerViewAdapter searchRecyclerViewAdapter;
+
+    private void performSearch(String query, int tabPosition) {
+        switch (tabPosition) {
+            case 0:
+                viewModel.searchMovies(query);
+                viewModel.getMovies().observe(this, movies -> searchRecyclerViewAdapter.updateSearchList(movies));
+                break;
+            case 1:
+                viewModel.searchTVs(query);
+                viewModel.getTVs().observe(this, tvs -> searchRecyclerViewAdapter.updateSearchList(tvs));
+
+                break;
+//            case 2:
+//                viewModel.searchPeople(query);
+//                break;
+            default:
+                break;
+        }
+    }
+
+
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_activity);
-
-        EditText searchEditText = findViewById(R.id.searchEditText);
-        RecyclerView searchRecyclerView = findViewById(R.id.searchRecyclerView);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        searchRecyclerView.setLayoutManager(layoutManager);
-        SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(this, new ArrayList<>());
-        searchRecyclerView.setAdapter(adapter);
-
         viewModel = new ViewModelProvider(this).get(SearchActivityViewModel.class);
 
-        searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        searchView = findViewById(R.id.directSearchView);
 
+        tabLayout = findViewById(R.id.searchTabLayout);
+        tabLayout.addTab(tabLayout.newTab().setText("Movies"));
+        tabLayout.addTab(tabLayout.newTab().setText("TV Shows"));
+//        tabLayout.addTab(tabLayout.newTab().setText("People"));
+
+
+        RecyclerView searchRecyclerView = findViewById(R.id.searchRecyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        searchRecyclerView.setLayoutManager(layoutManager);
+        searchRecyclerViewAdapter = new SearchRecyclerViewAdapter(this, new ArrayList<>());
+        searchRecyclerView.setAdapter(searchRecyclerViewAdapter);
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                viewModel.searchMovies(s.toString().trim());
+            public boolean onQueryTextSubmit(String query) {
+                performSearch(query.trim(), tabLayout.getSelectedTabPosition());
+                return true;
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public boolean onQueryTextChange(String newText) {
+                performSearch(newText.trim(), tabLayout.getSelectedTabPosition());
+                return true;
+            }
         });
 
-        // Observe ViewModel's LiveData
-        viewModel.getMovies().observe(this, movies -> {
-            adapter.updateMovieList(movies);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                String currentQuery = searchView != null ? searchView.getQuery().toString().trim() : "";
+
+                if (!currentQuery.isEmpty()) {
+                    performSearch(currentQuery, tab.getPosition());
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
         });
+
+
     }
 }
