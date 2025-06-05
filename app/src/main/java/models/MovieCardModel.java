@@ -22,7 +22,7 @@ public class MovieCardModel {
     public int getId() { return id; }
     public String getTitle() { return title; }
     public String getReleaseDate() { return releaseDate; }
-    public String getPosterUrl(){ return posterPath;}
+    public String getPosterUrl(){ return "https://image.tmdb.org/t/p/w500" + posterPath;}
 
 
 }

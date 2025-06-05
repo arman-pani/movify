@@ -13,38 +13,102 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieapp.R;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.List;
 
 import adapters.MovieGridAdapter;
+import adapters.ShimmerAdapter;
 import models.MovieCardModel;
-import models.MovieDetailModel;
 import viewModel.MoviesFragmentViewModel;
 
 public class MoviesFragment extends Fragment {
-    private MoviesFragmentViewModel viewModel;
 
-    public MoviesFragment(){}
+    private MoviesFragmentViewModel viewModel;
+    private ShimmerFrameLayout shimmerFrameLayout;
+    private RecyclerView shimmerRecyclerView;
+    private RecyclerView recyclerViewMovies;
+    private MovieGridAdapter movieGridAdapter;
+
+    private final int spanCount = 4;
+
+    public MoviesFragment() {}
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.movies_fragment, container, false);
 
-        RecyclerView recyclerViewMovies = view.findViewById(R.id.recyclerViewMovies);
-        recyclerViewMovies.setLayoutManager(new GridLayoutManager(this.getContext(), 4));
-
-        viewModel = new ViewModelProvider(this).get(MoviesFragmentViewModel.class);
-
-        viewModel.getPopularMovies().observe(getViewLifecycleOwner(), movieCardModels -> {
-            if (movieCardModels != null){
-                MovieGridAdapter movieGridAdapter = new MovieGridAdapter(getActivity(), movieCardModels);
-                recyclerViewMovies.setAdapter(movieGridAdapter);
-            }
-        });
+        initViews(view);
+        initViewModel();
+        initObservers();
+        initScrollListener();
 
         viewModel.fetchPopularMovies();
 
         return view;
+    }
+
+    private void initViews(View view) {
+        shimmerFrameLayout = view.findViewById(R.id.shimmerContainer);
+        shimmerRecyclerView = view.findViewById(R.id.gridRecyclerViewShimmer);
+        shimmerRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
+        shimmerRecyclerView.setAdapter(new ShimmerAdapter());
+
+        recyclerViewMovies = view.findViewById(R.id.recyclerViewMovies);
+        recyclerViewMovies.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
+    }
+
+    private void initViewModel() {
+        viewModel = new ViewModelProvider(this).get(MoviesFragmentViewModel.class);
+    }
+
+    private void initObservers() {
+        viewModel.getPopularMovies().observe(getViewLifecycleOwner(), movies -> {
+            if (movies != null) {
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                recyclerViewMovies.setVisibility(View.VISIBLE);
+
+                if (movieGridAdapter == null) {
+                    movieGridAdapter = new MovieGridAdapter(getActivity(), movies);
+                    recyclerViewMovies.setAdapter(movieGridAdapter);
+                } else {
+                    movieGridAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
+            // Handle or show the error (e.g., Toast or Snackbar)
+        });
+    }
+
+    private void initScrollListener() {
+        recyclerViewMovies.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
+                if (layoutManager == null) return;
+
+                int visibleItemCount = layoutManager.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                if (!viewModel.isLoading() && !viewModel.isLastPage()) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                            && firstVisibleItemPosition >= 0) {
+                        loadMoreItems();
+                    }
+                }
+            }
+        });
+    }
+
+    private void loadMoreItems() {
+        int nextPage = viewModel.getCurrentPage() + 1;
+        viewModel.setCurrentPage(nextPage);
+        viewModel.setLoading(true);
+        viewModel.fetchMorePopularMovies(nextPage);
     }
 }

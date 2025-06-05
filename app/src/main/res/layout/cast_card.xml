@@ -8,13 +8,31 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profileImageView"
+    <FrameLayout
+        android:layout_gravity="center"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:scaleType="centerCrop"
-        app:shapeAppearanceOverlay="@style/CircleImageView"
-        tools:srcCompat="@tools:sample/avatars" />
+     >
+        <TextView
+            android:id="@+id/initialsPlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="8sp"
+            android:background="@drawable/cast_placeholder_circle_bg"
+            android:textColor="@color/gray" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/CircleImageView"
+            tools:srcCompat="@tools:sample/avatars" />
+
+    </FrameLayout>
+
+
 
     <TextView
         android:id="@+id/castNameTextView"

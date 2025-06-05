@@ -1,0 +1,26 @@
+<com.facebook.shimmer.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/shimmer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:background="#E0E0E0"
+        android:elevation="4dp"
+        android:layout_margin="2.5dp"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:clickable="true"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:background="#E0E0E0"
+            android:orientation="vertical"
+            android:gravity="center" />
+    </androidx.cardview.widget.CardView>
+
+</com.facebook.shimmer.ShimmerFrameLayout>

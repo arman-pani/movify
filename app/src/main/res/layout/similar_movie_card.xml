@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="100dp"
+    android:layout_height="140dp"
     android:layout_margin="2.5dp"
     android:clickable="true"
     android:elevation="4dp"
     android:focusable="true"
+    android:background="@drawable/similar_card_background"
     android:foreground="?attr/selectableItemBackground">
+    <TextView
+        android:id="@+id/similarPlaceholderTextView"
+        android:layout_width="match_parent"
+        android:padding="5dp"
+        android:text="Movie Name"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:textColor="@color/gray" />
 
     <ImageView
         android:id="@+id/similarPosterImageView"

@@ -54,8 +54,8 @@ public class MovieRepository {
 
 
 
-    public void getPopularMovies(PopularMoviesCallback callback) {
-        apiClient.getPopularMovies("en-US", 1).enqueue(new Callback<MovieResponse>() {
+    public void getPopularMovies(int page, PopularMoviesCallback callback) {
+        apiClient.getPopularMovies("en-US", page).enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -70,9 +70,6 @@ public class MovieRepository {
                 callback.onFailure(t.getMessage());
             }
         });
-
-
-
 
     }
 

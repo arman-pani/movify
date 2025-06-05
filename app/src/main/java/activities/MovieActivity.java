@@ -4,9 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import static com.example.movieapp.R.*;
@@ -14,19 +12,20 @@ import static com.example.movieapp.R.*;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.movieapp.R;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import adapters.CastRecyclerViewAdapter;
 import adapters.CrewRecyclerViewAdapter;
 import adapters.SimilarRecyclerViewAdapter;
 import viewModel.MovieActivityViewModel;
-import viewModel.MoviesFragmentViewModel;
 
 public class MovieActivity extends AppCompatActivity {
     private int movieId;
@@ -40,11 +39,6 @@ public class MovieActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(layout.movie_activity);
 
-//        ProgressBar loadingProgressBar = findViewById(R.id.loadingProgressBar);
-//        ConstraintLayout movieLayout = findViewById(R.id.movieLayout);
-//        loadingProgressBar.setVisibility(View.VISIBLE);
-//        movieLayout.setVisibility(View.GONE);
-
         ImageView headerImageView = findViewById(R.id.headerImageView);
         TextView movieNameTextView = findViewById(R.id.movieNameTextView);
         TextView taglineTextView = findViewById(R.id.taglineTextView);
@@ -53,12 +47,16 @@ public class MovieActivity extends AppCompatActivity {
         TextView yearTextView = findViewById(R.id.yearTextView);
         TextView durationTextView = findViewById(R.id.durationTextView);
         TextView descriptionTextView = findViewById(R.id.descriptionTextView);
-        TextView showMoreTextView = findViewById(R.id.showMoreTextView);
         TextView trailerButton = findViewById(R.id.trailerTextButton);
         RecyclerView castRecyclerView = findViewById(R.id.castRecyclerView);
         RecyclerView crewRecyclerView = findViewById(R.id.crewRecyclerView);
         RecyclerView similarRecyclerView = findViewById(R.id.similarMoviesRecyclerView);
+        CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsingToolbar);
 
+        Toolbar toolbar = findViewById(R.id.movieToolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> finish());
 
 
         LinearLayoutManager castLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -81,8 +79,7 @@ public class MovieActivity extends AppCompatActivity {
             yearTextView.setText(details.getReleaseDate());
             durationTextView.setText(details.getRuntime() + " " + getString(string.mins));
             descriptionTextView.setText(details.getOverview());
-
-
+            collapsingToolbar.setTitle(details.getTitle());
 
             Glide.with(this)
                     .load( details.getBackdropPath())
@@ -101,21 +98,7 @@ public class MovieActivity extends AppCompatActivity {
             });
         });
 
-        descriptionTextView.post(() -> {
-            if (descriptionTextView.getLineCount() > 3) {
-                showMoreTextView.setVisibility(View.VISIBLE);
-            }
-        });
 
-        showMoreTextView.setOnClickListener(v -> {
-            if (showMoreTextView.getText().toString().equals("Show more")) {
-                descriptionTextView.setMaxLines(Integer.MAX_VALUE);
-                showMoreTextView.setText("Show less");
-            } else {
-                descriptionTextView.setMaxLines(3);
-                showMoreTextView.setText("Show more");
-            }
-        });
 
         viewModel.getCastList().observe(this, castList -> {
             CastRecyclerViewAdapter castAdapter = new CastRecyclerViewAdapter(castList, this);

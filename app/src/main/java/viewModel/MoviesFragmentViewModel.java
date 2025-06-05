@@ -1,11 +1,10 @@
 package viewModel;
 
-//import static network.ApiService.apiClient;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import models.MovieCardModel;
@@ -17,6 +16,7 @@ public class MoviesFragmentViewModel extends ViewModel {
     private final MutableLiveData<List<MovieCardModel>> popularMovies = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
+    private List<MovieCardModel> currentMovieList = new ArrayList<>();
     public LiveData<List<MovieCardModel>> getPopularMovies() {
         return  popularMovies;
     }
@@ -25,28 +25,68 @@ public class MoviesFragmentViewModel extends ViewModel {
         return errorMessage;
     }
 
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
+
+    private int currentPage = 1;
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public boolean isLoading() {
+        return isLoading;
+    }
+
+    public boolean isLastPage() {
+        return isLastPage;
+    }
+
+    public void setLastPage(boolean lastPage) {
+        isLastPage = lastPage;
+    }
+
+    public void setLoading(boolean loading) {
+        isLoading = loading;
+    }
+
     public  void fetchPopularMovies(){
 
-//        ApiService.getTMDBApiClient().getPopularMovies("en-US",1).enqueue(new Callback<MovieResponse>() {
-//            @Override
-//            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-//                System.out.println(response.body());;
-//            }
-//
-//            @Override
-//            public void onFailure(Call<MovieResponse> call, Throwable t) {
-//                System.out.println(t.toString());
-//            }
-//        });
-        movieRepository.getPopularMovies(new MovieRepository.PopularMoviesCallback() {
+        movieRepository.getPopularMovies(1, new MovieRepository.PopularMoviesCallback() {
             @Override
             public void onSuccess(List<MovieCardModel> movies) {
-                popularMovies.postValue(movies);
+                currentMovieList.clear();
+                currentMovieList.addAll(movies);
+                popularMovies.postValue(currentMovieList);
             }
 
             @Override
             public void onFailure(String error) {
                 errorMessage.postValue(error);
+            }
+        });
+    }
+
+    public void fetchMorePopularMovies(int page) {
+        movieRepository.getPopularMovies(page, new MovieRepository.PopularMoviesCallback() {
+            @Override
+            public void onSuccess(List<MovieCardModel> newMovies) {
+                if (newMovies.isEmpty()) {
+                    isLastPage = true;
+                } else {
+                    currentMovieList.addAll(newMovies);
+                    popularMovies.postValue(currentMovieList);
+                    isLoading = false;
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                isLoading = false;
             }
         });
     }

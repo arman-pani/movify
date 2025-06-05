@@ -21,7 +21,7 @@ public class CrewModel {
 
     public int getId(){ return id;}
     public String getName(){return name;}
-    public String getProfilePath(){return profilePath;}
+    public String getProfilePath(){return "https://image.tmdb.org/t/p/w500" + profilePath;}
     public String getJob(){return job;}
 
 }

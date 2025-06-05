@@ -4,5 +4,12 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+    <style name="TransparentTitle" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textColor">@android:color/transparent</item>
+    </style>
+
+    <style name="CollapsedTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 
 </resources>
