@@ -15,11 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.movieapp.R;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
-import java.util.List;
-
 import adapters.MovieGridAdapter;
 import adapters.ShimmerAdapter;
-import models.MovieCardModel;
 import viewModel.MoviesFragmentViewModel;
 
 public class MoviesFragment extends Fragment {
@@ -41,7 +38,6 @@ public class MoviesFragment extends Fragment {
 
         initViews(view);
         initViewModel();
-        initObservers();
         initScrollListener();
 
         viewModel.fetchPopularMovies();
@@ -78,10 +74,12 @@ public class MoviesFragment extends Fragment {
                 }
             }
         });
+    }
 
-        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
-            // Handle or show the error (e.g., Toast or Snackbar)
-        });
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initObservers();
     }
 
     private void initScrollListener() {

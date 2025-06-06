@@ -11,9 +11,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.movieapp.R;
 
-public class ReviewsFragment extends Fragment {
+public class TVFragment extends Fragment {
 
-    public  ReviewsFragment(){}
+    public TVFragment(){}
 
     @Nullable
     @Override

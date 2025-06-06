@@ -12,7 +12,7 @@
         />
     <fragment
         android:id="@+id/reviewsFragment"
-        android:name="fragments.ReviewsFragment"
+        android:name="fragments.TVFragment"
         android:label="Reviews"
         />
     <fragment

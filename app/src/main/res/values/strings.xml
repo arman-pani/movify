@@ -18,4 +18,7 @@
     <string name="crew">CREW</string>
     <string name="cast">CAST</string>
     <string name="similar_movies">Similar Movies</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="no_bookmarks_yet">No bookmarks yet!!</string>
 </resources>

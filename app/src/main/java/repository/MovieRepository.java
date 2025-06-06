@@ -52,6 +52,10 @@ public class MovieRepository {
         void onFailure(String error);
     }
 
+    public interface PopularTVCallback {
+        void onSuccess(List<TVItemModel> searchData);
+        void onFailure(String error);
+    }
 
 
     public void getPopularMovies(int page, PopularMoviesCallback callback) {
@@ -159,6 +163,24 @@ public class MovieRepository {
                     callback.onSuccess(response.body().getResults());
                 } else {
                     callback.onFailure("Failed to load movies");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TVResponse> call, Throwable t) {
+                callback.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    public void getPopularTV(int page, PopularTVCallback callback){
+        apiClient.getPopularTV("en-US", page, "popularity.desc").enqueue(new Callback<TVResponse>() {
+            @Override
+            public void onResponse(Call<TVResponse> call, Response<TVResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body().getResults());
+                } else {
+                    callback.onFailure("Failed to load TV Series");
                 }
             }
 

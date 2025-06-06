@@ -4,12 +4,18 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import static com.example.movieapp.R.*;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,8 +25,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.movieapp.R;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import adapters.CastRecyclerViewAdapter;
 import adapters.CrewRecyclerViewAdapter;
@@ -31,6 +38,77 @@ public class MovieActivity extends AppCompatActivity {
     private int movieId;
 
     private MovieActivityViewModel viewModel;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.movie_appbar_menu, menu);
+        MenuItem bookmarkItem = menu.findItem(R.id.toolbar_bookmark);
+
+        viewModel.getMovieDetails().observe(this, movie -> {
+            if (movie != null) {
+                if (viewModel.isBookmarked()) {
+                    bookmarkItem.setIcon(R.drawable.bookmark_saved);
+                } else {
+                    bookmarkItem.setIcon(R.drawable.bookmark);
+                }
+            }
+        });
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.toolbar_bookmark) {
+            if (viewModel.isBookmarked()) {
+                viewModel.removeBookmark();
+                item.setIcon(R.drawable.bookmark);
+            } else {
+                viewModel.addBookmark();
+                item.setIcon(R.drawable.bookmark_saved);
+            }
+        } else if (item.getItemId() == R.id.toolbar_save) {
+            shareMovieMethod();
+        }
+        return true;
+    }
+
+    private void shareMovieMethod(){
+        viewModel.getMovieDetails().observe(this, details->{
+            String message = "🎬 Movie Title: " + details.getTitle() + "\n\n"
+                    + "⏱ Duration: " + details.getRuntime() + " mins" + "\n\n"
+                    + "📝 Description: " + details.getOverview();
+
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+            sendIntent.setType("text/plain");
+
+            Intent shareIntent = Intent.createChooser(sendIntent, "Share via");
+            startActivity(shareIntent);
+        });
+
+    }
+
+    private void showBottomSheet(){
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MovieActivity.this);
+        View bottomSheetView = LayoutInflater.from(getApplicationContext())
+                .inflate(layout.movie_bottom_sheet_layout, null);
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
+
+        TextView shareButton = bottomSheetView.findViewById(R.id.shareButton);
+        shareButton.setOnClickListener(v -> {
+            shareMovieMethod();
+            bottomSheetDialog.dismiss();
+        });
+
+        TextView bookmarkButton = bottomSheetView.findViewById(R.id.bookmarkButton);
+        bookmarkButton.setOnClickListener(v -> {
+            viewModel.addBookmark();
+            bottomSheetDialog.dismiss();
+        });
+    }
 
 
     @SuppressLint("SetTextI18n")
@@ -52,11 +130,16 @@ public class MovieActivity extends AppCompatActivity {
         RecyclerView crewRecyclerView = findViewById(R.id.crewRecyclerView);
         RecyclerView similarRecyclerView = findViewById(R.id.similarMoviesRecyclerView);
         CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsingToolbar);
+        FloatingActionButton movieFAB = findViewById(R.id.movieFAB);
+
+
+        movieFAB.setOnClickListener(v -> showBottomSheet());
 
         Toolbar toolbar = findViewById(R.id.movieToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> finish());
+
 
 
         LinearLayoutManager castLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -117,8 +200,6 @@ public class MovieActivity extends AppCompatActivity {
             similarRecyclerView.setAdapter(similarAdapter);
         });
 
-//        loadingProgressBar.setVisibility(View.GONE);
-//        movieLayout.setVisibility(View.VISIBLE);
 
     }
 }

@@ -71,9 +71,9 @@ public class MainActivity extends AppCompatActivity {
             if (position == 0){
                 tab.setText("Movies");
             } else if (position == 1){
-                tab.setText("Reviews");
+                tab.setText("TV Series");
             } else if (position == 2){
-                tab.setText("Lists");
+                tab.setText("People");
             }
         }).attach();
 
@@ -93,35 +93,25 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
 
-        appbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(GravityCompat.START); // Handle drawer opening manually
-            }
-        });
+        appbar.setNavigationOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
         drawerNavigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        int id = item.getItemId();
+                item -> {
+                    int id = item.getItemId();
 
-                        if(id == R.id.nav_home) {
-                            navController.navigate(R.id.moviesFragment);
+                    if(id == R.id.nav_home) {
+                        navController.navigate(R.id.moviesFragment);
 
-                        } else if (id == R.id.nav_search){
-                            Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-                            startActivity(intent);
+                    } else if (id == R.id.nav_search){
+                        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                        startActivity(intent);
 
-                        } else if (id == R.id.nav_login) {
-                            navController.navigate(R.id.moviesFragment);
-
-                        } else if (id == R.id.nav_create_account) {
-                            navController.navigate(R.id.listsFragment);
-                        }
-                        drawerLayout.closeDrawers();
-                        return true;
+                    } else if (id == R.id.nav_bookmark){
+                        Intent intent = new Intent(MainActivity.this, BookmarkActivity.class);
+                        startActivity(intent);
                     }
+                    drawerLayout.closeDrawers();
+                    return true;
                 }
         );
 

@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity android:name="activities.MovieActivity" />
-
+        <activity android:name="activities.BookmarkActivity"/>
 
     </application>
 

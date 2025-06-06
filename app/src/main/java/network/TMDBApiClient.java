@@ -44,5 +44,13 @@ public interface TMDBApiClient {
             @Query("query") String query
     );
 
+    @GET("discover/tv")
+    Call<TVResponse> getPopularTV(
+            @Query("language") String language,
+            @Query("page") int page,
+            @Query("sort_by") String sortBy
+    );
+
+
 
 }

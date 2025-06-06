@@ -38,21 +38,15 @@ public class MoviesFragmentViewModel extends ViewModel {
         this.currentPage = currentPage;
     }
 
-    public boolean isLoading() {
-        return isLoading;
-    }
+    public boolean isLoading() {return isLoading;}
 
     public boolean isLastPage() {
         return isLastPage;
     }
 
-    public void setLastPage(boolean lastPage) {
-        isLastPage = lastPage;
-    }
+    public void setLastPage(boolean lastPage) {isLastPage = lastPage;}
 
-    public void setLoading(boolean loading) {
-        isLoading = loading;
-    }
+    public void setLoading(boolean loading) {isLoading = loading;}
 
     public  void fetchPopularMovies(){
 
