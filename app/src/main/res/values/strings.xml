@@ -21,4 +21,6 @@
     <string name="bookmark">Bookmark</string>
     <string name="bookmarks">Bookmarks</string>
     <string name="no_bookmarks_yet">No bookmarks yet!!</string>
+    <string name="logout">Logout</string>
+    <string name="default_web_client_id">51508480623-48oj0kv90oqfja3o5glrvm7vq9o416cq.apps.googleusercontent.com</string>
 </resources>

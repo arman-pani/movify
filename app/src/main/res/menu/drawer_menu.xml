@@ -17,15 +17,11 @@
         android:icon="@drawable/bookmark"
         />
     <item
-        android:id="@+id/nav_login"
-        android:title="@string/login"
+        android:id="@+id/nav_logout"
+        android:title="@string/logout"
+        android:iconTint="@color/red"
         android:icon="@drawable/login"
         />
 
-    <item
-        android:id="@+id/nav_create_account"
-        android:title="@string/create_account"
-        android:icon="@drawable/create_account"
-        />
 
 </menu>

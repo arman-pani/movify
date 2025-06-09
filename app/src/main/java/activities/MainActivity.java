@@ -24,17 +24,34 @@ import com.example.movieapp.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import adapters.TabViewPagerAdapter;
+import helpers.FirebaseHelper;
 
 public class MainActivity extends AppCompatActivity {
 
 
     private NavController navController;
+    private FirebaseHelper authHelper = new FirebaseHelper();
 
     private DrawerLayout drawerLayout;
     private NavigationView drawerNavigationView;
     private ActionBarDrawerToggle toggle;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (!authHelper.isUserLoggedIn()) {
+            Intent intent = new Intent(this, RegisterActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,6 +126,12 @@ public class MainActivity extends AppCompatActivity {
                     } else if (id == R.id.nav_bookmark){
                         Intent intent = new Intent(MainActivity.this, BookmarkActivity.class);
                         startActivity(intent);
+                    } else if (id == R.id.nav_logout){
+                        authHelper.signOut();
+                        Intent intent = new Intent(this, RegisterActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
                     }
                     drawerLayout.closeDrawers();
                     return true;
