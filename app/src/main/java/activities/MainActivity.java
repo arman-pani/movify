@@ -21,9 +21,14 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.movieapp.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.appcheck.AppCheckProviderFactory;
+import com.google.firebase.appcheck.FirebaseAppCheck;
+import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -32,7 +37,7 @@ import helpers.FirebaseHelper;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    private FloatingActionButton fab;
     private NavController navController;
     private FirebaseHelper authHelper = new FirebaseHelper();
 
@@ -78,8 +83,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FirebaseApp.initializeApp(this);
+        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+        firebaseAppCheck.installAppCheckProviderFactory(
+                DebugAppCheckProviderFactory.getInstance()
+        );
+
+
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         ViewPager2 viewPager2 = findViewById(R.id.tab_view_pager);
+        fab = findViewById(R.id.movieBotFAB);
+
+        fab.setOnClickListener(v ->{
+            Intent intent = new Intent(MainActivity.this, ChatbotActivity.class);
+            startActivity(intent);
+        });
 
         TabViewPagerAdapter adapter = new TabViewPagerAdapter(this);
         viewPager2.setAdapter(adapter);

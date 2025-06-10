@@ -1,0 +1,22 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/userBubbleLayout"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:paddingVertical="5dp"
+    android:paddingStart="30dp"
+    android:paddingEnd="5dp"
+    android:gravity="end"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/userMessageTextView"
+        android:layout_width="wrap_content"
+        android:background="@drawable/bg_bubble"
+        android:textColor="@color/white"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="15dp"
+        android:text="User: Hello Movie Chatbot sjsjsjjsjsjsjsjsjjsjsjsjjsjsjsjjsjsjsjsjjsjsjsjsjjsjsjsjsjjsjsjsjsjsjjsjsjssjjsjsjsjsjjsjss"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
