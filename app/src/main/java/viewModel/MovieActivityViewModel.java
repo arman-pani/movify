@@ -6,11 +6,12 @@ import android.widget.Toast;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import helpers.BookmarkDatabaseHelper;
 import models.CastModel;
@@ -19,7 +20,9 @@ import models.MovieCardModel;
 import models.MovieDetailModel;
 import repository.MovieRepository;
 
+
 public class MovieActivityViewModel extends AndroidViewModel {
+    private ExecutorService executor;
 
     private BookmarkDatabaseHelper bookmarkDatabaseHelper;
     private final MovieRepository repository = new MovieRepository();
@@ -46,6 +49,7 @@ public class MovieActivityViewModel extends AndroidViewModel {
 
     public MovieActivityViewModel(@NotNull Application application){
         super(application);
+        executor = Executors.newFixedThreadPool(3);
         bookmarkDatabaseHelper = new BookmarkDatabaseHelper(application);
     }
 
@@ -73,7 +77,7 @@ public class MovieActivityViewModel extends AndroidViewModel {
     }
 
     public void loadMovieData (int movieId){
-        repository.getMovieDetailsById(movieId, new MovieRepository.MovieDetailCallback() {
+        executor.execute(()-> repository.getMovieDetailsById(movieId, new MovieRepository.MovieDetailCallback() {
             @Override
             public void onSuccess(MovieDetailModel data) {
                 movieDetails.postValue(data);
@@ -84,8 +88,9 @@ public class MovieActivityViewModel extends AndroidViewModel {
             public void onFailure(String error) {
                 System.out.println("Error: " + error);
             }
-        });
-        repository.getMovieCreditsById(movieId, new MovieRepository.CreditsCallback() {
+        }));
+
+        executor.execute(()-> repository.getMovieCreditsById(movieId, new MovieRepository.CreditsCallback() {
             @Override
             public void onSuccess(List<CastModel> cast, List<CrewModel> crew) {
                 crewList.postValue(crew);
@@ -95,9 +100,9 @@ public class MovieActivityViewModel extends AndroidViewModel {
             public void onFailure(String error) {
                 System.out.println("Error: " + error);
             }
-        });
+        }));
 
-        repository.getSimilarMoviesById(movieId, new MovieRepository.SimilarMoviesCallback() {
+        executor.execute(()-> repository.getSimilarMoviesById(movieId, new MovieRepository.SimilarMoviesCallback() {
             @Override
             public void onSuccess(List<MovieCardModel> movies) {
                 similarMovies.postValue(movies);
@@ -107,6 +112,12 @@ public class MovieActivityViewModel extends AndroidViewModel {
             public void onFailure(String error) {
                 System.out.println("Error: " + error);
             }
-        });
+        }));
+    }
+
+    @Override
+    protected void onCleared() {
+        executor.shutdown();
+        super.onCleared();
     }
 }
