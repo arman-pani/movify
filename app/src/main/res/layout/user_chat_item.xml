@@ -3,7 +3,7 @@
     android:id="@+id/userBubbleLayout"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:paddingVertical="5dp"
+    android:paddingVertical="10dp"
     android:paddingStart="30dp"
     android:paddingEnd="5dp"
     android:gravity="end"

@@ -25,4 +25,6 @@
     <string name="default_web_client_id">51508480623-48oj0kv90oqfja3o5glrvm7vq9o416cq.apps.googleusercontent.com</string>
     <string name="type_your_message_here">Type your message here</string>
     <string name="movie_chatbot">Movie Chatbot</string>
+    <string name="share">Share</string>
+    <string name="more">More</string>
 </resources>

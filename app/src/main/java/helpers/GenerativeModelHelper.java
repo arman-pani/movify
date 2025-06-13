@@ -8,6 +8,7 @@ import com.google.firebase.ai.GenerativeModel;
 import com.google.firebase.ai.java.GenerativeModelFutures;
 import com.google.firebase.ai.type.Content;
 import com.google.firebase.ai.type.GenerateContentResponse;
+import com.google.firebase.ai.type.GenerationConfig;
 import com.google.firebase.ai.type.GenerativeBackend;
 
 import java.util.concurrent.Executor;
@@ -25,8 +26,15 @@ public class GenerativeModelHelper {
 
     // Constructor
     public GenerativeModelHelper() {
+        GenerationConfig config = new GenerationConfig.Builder()
+                .setMaxOutputTokens(200)
+                .setTemperature(0.2f)
+                .setTopK(20)
+                .setTopP(0.7f)
+                .build();
+
         GenerativeModel ai = FirebaseAI.getInstance(GenerativeBackend.googleAI())
-                .generativeModel("gemini-2.0-flash");
+                .generativeModel("gemini-2.0-flash", config);
 
         this.model = GenerativeModelFutures.from(ai);
 
@@ -64,18 +72,12 @@ public class GenerativeModelHelper {
         }, executor);
     }
 
-
-    /**
-     * Generate a response with a system prompt and user message
-     * @param systemPrompt Instructions for the AI
-     * @param userMessage The user's message
-     * @param callback Callback to handle the response
-     */
-    public void generateResponseWithSystem(String systemPrompt, String userMessage, ResponseCallback callback) {
+    public void generateResponseWithSystem( String userMessage, ResponseCallback callback) {
         if (userMessage == null || userMessage.trim().isEmpty()) {
             callback.onFailure(new IllegalArgumentException("User message cannot be null or empty"));
             return;
         }
+        String systemPrompt = "You are a friendly and knowledgeable movie expert. Respond clearly and briefly. Avoid long paragraphs.";
 
         // Combine system prompt and user message
         String combinedPrompt = systemPrompt != null && !systemPrompt.trim().isEmpty()
@@ -85,9 +87,6 @@ public class GenerativeModelHelper {
         generateResponse(combinedPrompt, callback);
     }
 
-    /**
-     * Clean up resources
-     */
     public void shutdown() {
         if (executor instanceof java.util.concurrent.ExecutorService) {
             ((java.util.concurrent.ExecutorService) executor).shutdown();

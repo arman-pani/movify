@@ -51,6 +51,4 @@ public interface TMDBApiClient {
             @Query("sort_by") String sortBy
     );
 
-
-
 }

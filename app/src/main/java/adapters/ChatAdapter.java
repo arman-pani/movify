@@ -1,6 +1,8 @@
 package adapters;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import com.example.movieapp.R;
 
 import java.util.List;
 
+import io.noties.markwon.Markwon;
 import models.ChatMessage;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -68,16 +71,39 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ChatMessage message = messageList.get(position);
+        Markwon markwon = Markwon.create(context);
 
         if (holder.getItemViewType() == ChatMessage.TYPE_USER){
             ((UserChatViewHolder) holder).userMessageTextView.setText(message.getMessage());
         } else {
-            ((BotChatViewHolder) holder).botMessageTextView.setText(message.getMessage());
-        }
+            BotChatViewHolder botHolder = (BotChatViewHolder) holder;
+            animateTypingEffect(botHolder.botMessageTextView, message.getMessage(), markwon);        }
     }
 
     @Override
     public int getItemCount() {
         return messageList.size();
     }
+
+    private void animateTypingEffect(TextView textView, String fullText, Markwon markwon) {
+        final Handler handler = new Handler(Looper.getMainLooper());
+        final StringBuilder builder = new StringBuilder();
+        final int delay = 20; // typing speed in ms
+        final int[] index = {0};
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (index[0] < fullText.length()) {
+                    builder.append(fullText.charAt(index[0]));
+                    markwon.setMarkdown(textView, builder.toString());
+                    index[0]++;
+                    handler.postDelayed(this, delay);
+                } else {
+                    markwon.setMarkdown(textView, fullText); // Ensure final formatting
+                }
+            }
+        }, delay);
+    }
+
 }

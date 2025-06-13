@@ -44,26 +44,24 @@
 
         <EditText
             android:id="@+id/messageEditText"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:minLines="1"
             android:autofillHints=""
             android:background="@color/transparent"
             android:hint="@string/type_your_message_here"
-            android:inputType="text"
+            android:inputType="textMultiLine|textCapSentences"
             android:maxLines="5" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
 
         <ImageButton
             android:id="@+id/sendButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/send_button_bg"
-            android:contentDescription="@null"
-            tools:src="@drawable/send" />
+            android:contentDescription="Send"
+            android:src="@drawable/send" />
 
 
     </LinearLayout>

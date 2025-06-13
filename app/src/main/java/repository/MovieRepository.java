@@ -1,6 +1,9 @@
 package repository;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import models.CastModel;
 import models.CreditsResponse;
@@ -20,6 +23,7 @@ import retrofit2.Response;
 public class MovieRepository {
 
     private final TMDBApiClient apiClient = ApiService.getTMDBApiClient();
+
 
     public MovieRepository() {}
 
@@ -59,9 +63,10 @@ public class MovieRepository {
 
 
     public void getPopularMovies(int page, PopularMoviesCallback callback) {
+
         apiClient.getPopularMovies("en-US", page).enqueue(new Callback<MovieResponse>() {
             @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+            public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     callback.onSuccess(response.body().getResults());
                 } else {
@@ -109,7 +114,7 @@ public class MovieRepository {
             }
 
             @Override
-            public void onFailure(Call<CreditsResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<CreditsResponse> call, @NonNull Throwable t) {
                 callback.onFailure(t.getMessage());
             }
         });

@@ -1,8 +1,12 @@
 package activities;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Html;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,19 +33,23 @@ public class ChatbotActivity extends AppCompatActivity {
     ChatAdapter chatAdapter;
 
     Toolbar toolbar;
+
     private void sendMessage() {
         String message = inputEditText.getText().toString().trim();
         if (!message.isEmpty()) {
-            chatAdapter.addMessage(new ChatMessage("User: " + message, ChatMessage.TYPE_USER));
+            chatAdapter.addMessage(new ChatMessage(message, ChatMessage.TYPE_USER));
+            recyclerView.post(() -> recyclerView.smoothScrollToPosition(chatAdapter.getItemCount() - 1));
             inputEditText.setText("");
 
             recyclerView.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
-            modelHelper.generateResponse(message, new GenerativeModelHelper.ResponseCallback() {
+            modelHelper.generateResponseWithSystem(message, new GenerativeModelHelper.ResponseCallback() {
                 @Override
                 public void onSuccess(String response) {
                     runOnUiThread(() -> {
-                        chatAdapter.addMessage(new ChatMessage("Bot: " + response, ChatMessage.TYPE_BOT));
-                        recyclerView.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
+                        chatAdapter.addMessage(new ChatMessage(response, ChatMessage.TYPE_BOT));
+                        recyclerView.post(() ->
+                                recyclerView.smoothScrollToPosition(chatAdapter.getItemCount() - 1)
+                        );
                     });
                 }
 
@@ -72,9 +80,25 @@ public class ChatbotActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        layoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(layoutManager);
         chatAdapter = new ChatAdapter(chatMessages,this);
+        chatAdapter.setHasStableIds(true);
         recyclerView.setAdapter(chatAdapter);
+
+        inputEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus && chatAdapter.getItemCount() > 0) {
+                recyclerView.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
+            }
+        });
+
+        inputEditText.setOnClickListener(v -> {
+            if (chatAdapter.getItemCount() > 0) {
+                recyclerView.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
+            }
+        });
+
 
         recyclerView.postDelayed(() -> {
             if (chatAdapter.getItemCount() > 0) {
@@ -84,5 +108,11 @@ public class ChatbotActivity extends AppCompatActivity {
 
         sendButton.setOnClickListener(v -> sendMessage());
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        modelHelper.shutdown();
     }
 }

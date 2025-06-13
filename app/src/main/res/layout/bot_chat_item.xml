@@ -3,7 +3,7 @@
     android:id="@+id/botBubbleLayout"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:paddingVertical="5dp"
+    android:paddingVertical="10dp"
     android:paddingStart="5dp"
     android:paddingEnd="30dp"
     android:gravity="start"
@@ -12,10 +12,9 @@
     <TextView
         android:id="@+id/botMessageTextView"
         android:layout_width="wrap_content"
-        android:background="@drawable/bg_bubble"
         android:textColor="@color/white"
         android:paddingVertical="10dp"
-        android:paddingHorizontal="15dp"
+        android:paddingHorizontal="5dp"
         android:text="Bot: Hello Arman! how are you?"
         android:layout_height="wrap_content" />
 

@@ -7,7 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import fragments.ListsFragment;
 import fragments.MoviesFragment;
-import fragments.TVFragment;
+import fragments.NewsFragment;
 
 public class TabViewPagerAdapter extends FragmentStateAdapter {
 
@@ -20,8 +20,7 @@ public class TabViewPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         switch (position){
-            case 0: return new MoviesFragment();
-            case 1: return new TVFragment();
+            case 1: return new NewsFragment();
             case 2: return new ListsFragment();
             default: return new MoviesFragment();
         }

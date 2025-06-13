@@ -69,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_search){
-            Toast.makeText(this, "Search clicked", Toast.LENGTH_SHORT).show();
-            return true;
+            Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+            startActivity(intent);
         } else if (id == R.id.action_settings) {
             Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show();
             return true;
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             if (position == 0){
                 tab.setText("Movies");
             } else if (position == 1){
-                tab.setText("TV Series");
+                tab.setText("News");
             } else if (position == 2){
                 tab.setText("People");
             }
